@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../../lib/supabase' // تأكد من مسار ملف supabase client
+import { supabase } from '../../lib/supabase' // Ensure correct path to supabase client
 
 export function LoginPage() {
   const navigate = useNavigate()

@@ -11,7 +11,9 @@ export default function EmailVerificationPage() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // حاول تجيب السيشن الحالية
+        // Try to get current session
+        // If session exists and email is verified → redirect immediately
+        // Watch for changes in authentication state
         const { data: { session } } = await supabase.auth.getSession()
 
         // لو السيشن موجودة والايميل متأكد → حول مباشرة

@@ -52,7 +52,7 @@ export default function SEO() {
       <div className='service-details'>
         <div className='details-container'>
           <div className='details-content'>
-            <h2>استراتيجيات SEO</h2>
+            <h2>SEO Strategies</h2>
             <div className='features-grid'>
               <div className='feature-card'>
                 <div className='feature-icon'>

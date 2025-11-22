@@ -1,0 +1,252 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.activities (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  type text,
+  title text,
+  description text,
+  project text,
+  link text,
+  client_id uuid DEFAULT auth.uid(),
+  CONSTRAINT activities_pkey PRIMARY KEY (id),
+  CONSTRAINT activities_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id)
+);
+CREATE TABLE public.client (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  first_name text,
+  second_name text,
+  phone text,
+  email text,
+  avatar_url text,
+  bio text,
+  role text,
+  status text,
+  last_login_at timestamp with time zone,
+  updated_at timestamp with time zone,
+  country text,
+  referral_code text,
+  company_name text,
+  id uuid UNIQUE,
+  user_id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  wallet double precision,
+  referred_by uuid,
+  CONSTRAINT client_pkey PRIMARY KEY (user_id),
+  CONSTRAINT client_referred_by_fkey FOREIGN KEY (referred_by) REFERENCES public.client(id)
+);
+CREATE TABLE public.comment_likes (
+  id bigint NOT NULL DEFAULT nextval('comment_likes_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  client_id uuid,
+  comment_id bigint,
+  CONSTRAINT comment_likes_pkey PRIMARY KEY (id),
+  CONSTRAINT comment_likes_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT comment_likes_comment_id_fkey FOREIGN KEY (comment_id) REFERENCES public.feedback_comments(id)
+);
+CREATE TABLE public.feedback (
+  id bigint NOT NULL DEFAULT nextval('feedback_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  client_id uuid,
+  rating integer CHECK (rating >= 1 AND rating <= 5),
+  category character varying NOT NULL CHECK (category::text = ANY (ARRAY['general'::character varying, 'feature'::character varying, 'bug'::character varying, 'idea'::character varying]::text[])),
+  title character varying NOT NULL,
+  message text NOT NULL,
+  status character varying DEFAULT 'pending'::character varying CHECK (status::text = ANY (ARRAY['pending'::character varying, 'reviewed'::character varying, 'resolved'::character varying, 'closed'::character varying]::text[])),
+  response text,
+  responded_at timestamp with time zone,
+  responded_by uuid,
+  project_id bigint,
+  tags ARRAY DEFAULT '{}'::text[],
+  attachment_url text,
+  is_public boolean DEFAULT true,
+  likes_count integer DEFAULT 0,
+  shares_count integer DEFAULT 0,
+  views_count integer DEFAULT 0,
+  comment_count integer DEFAULT 0,
+  CONSTRAINT feedback_pkey PRIMARY KEY (id),
+  CONSTRAINT feedback_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT feedback_responded_by_fkey FOREIGN KEY (responded_by) REFERENCES public.client(id),
+  CONSTRAINT feedback_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.project(id)
+);
+CREATE TABLE public.feedback_comments (
+  id bigint NOT NULL DEFAULT nextval('feedback_comments_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  client_id uuid,
+  feedback_id bigint,
+  parent_id bigint,
+  content text NOT NULL,
+  likes_count integer DEFAULT 0,
+  is_edited boolean DEFAULT false,
+  depth integer DEFAULT 0,
+  path USER-DEFINED,
+  CONSTRAINT feedback_comments_pkey PRIMARY KEY (id),
+  CONSTRAINT feedback_comments_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT feedback_comments_feedback_id_fkey FOREIGN KEY (feedback_id) REFERENCES public.feedback(id),
+  CONSTRAINT feedback_comments_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.feedback_comments(id)
+);
+CREATE TABLE public.feedback_likes (
+  id bigint NOT NULL DEFAULT nextval('feedback_likes_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  client_id uuid,
+  feedback_id bigint,
+  CONSTRAINT feedback_likes_pkey PRIMARY KEY (id),
+  CONSTRAINT feedback_likes_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT feedback_likes_feedback_id_fkey FOREIGN KEY (feedback_id) REFERENCES public.feedback(id)
+);
+CREATE TABLE public.feedback_tags (
+  id bigint NOT NULL DEFAULT nextval('feedback_tags_id_seq'::regclass),
+  feedback_id bigint,
+  tag_id bigint,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT feedback_tags_pkey PRIMARY KEY (id),
+  CONSTRAINT feedback_tags_feedback_id_fkey FOREIGN KEY (feedback_id) REFERENCES public.feedback(id),
+  CONSTRAINT feedback_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(id)
+);
+CREATE TABLE public.notifications (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  type text,
+  title text,
+  message text,
+  unread boolean,
+  client_id uuid DEFAULT auth.uid(),
+  CONSTRAINT notifications_pkey PRIMARY KEY (id),
+  CONSTRAINT notifications_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id)
+);
+CREATE TABLE public.post_views (
+  id bigint NOT NULL DEFAULT nextval('post_views_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  client_id uuid,
+  feedback_id bigint,
+  ip_address inet,
+  CONSTRAINT post_views_pkey PRIMARY KEY (id),
+  CONSTRAINT post_views_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT post_views_feedback_id_fkey FOREIGN KEY (feedback_id) REFERENCES public.feedback(id)
+);
+CREATE TABLE public.project (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  total_price bigint,
+  live_link text,
+  start_at timestamp with time zone,
+  end_at timestamp with time zone,
+  timeline jsonb,
+  progress integer,
+  files jsonb,
+  ui jsonb,
+  extensions jsonb,
+  name text,
+  des text,
+  status text,
+  tasks jsonb,
+  logos jsonb,
+  technologies ARRAY,
+  type text,
+  client_id uuid DEFAULT auth.uid(),
+  supabase_url text,
+  supabase_anon text,
+  blog_tabel_name text,
+  CONSTRAINT project_pkey PRIMARY KEY (id),
+  CONSTRAINT project_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id)
+);
+CREATE TABLE public.tags (
+  id bigint NOT NULL DEFAULT nextval('tags_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  name text NOT NULL UNIQUE,
+  slug text NOT NULL UNIQUE,
+  description text,
+  usage_count integer DEFAULT 0,
+  CONSTRAINT tags_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.tool_catalog (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tool_id text NOT NULL UNIQUE,
+  name text NOT NULL,
+  description text NOT NULL,
+  price numeric NOT NULL,
+  currency text NOT NULL DEFAULT 'EGP'::text,
+  status text DEFAULT 'Paid'::text,
+  image_url text,
+  route_path text NOT NULL,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT tool_catalog_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.tool_instances (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  client_id uuid NOT NULL,
+  tool_id text NOT NULL,
+  ordinal_id integer NOT NULL,
+  title text,
+  source_image_url text NOT NULL,
+  site_url text NOT NULL,
+  status text NOT NULL DEFAULT 'generated'::text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT tool_instances_pkey PRIMARY KEY (id),
+  CONSTRAINT tool_instances_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id),
+  CONSTRAINT tool_instances_tool_id_fkey FOREIGN KEY (tool_id) REFERENCES public.tools(tool_id)
+);
+CREATE TABLE public.tools (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tool_id text NOT NULL UNIQUE,
+  name text NOT NULL,
+  price numeric NOT NULL DEFAULT 0,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT tools_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.transactions (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  type text,
+  amount bigint,
+  description text,
+  project text,
+  status text,
+  client_id uuid DEFAULT gen_random_uuid(),
+  CONSTRAINT transactions_pkey PRIMARY KEY (id),
+  CONSTRAINT transactions_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id)
+);
+CREATE TABLE public.user_follows (
+  id bigint NOT NULL DEFAULT nextval('user_follows_id_seq'::regclass),
+  created_at timestamp with time zone DEFAULT now(),
+  follower_id uuid,
+  following_id uuid,
+  CONSTRAINT user_follows_pkey PRIMARY KEY (id),
+  CONSTRAINT user_follows_follower_id_fkey FOREIGN KEY (follower_id) REFERENCES public.client(id),
+  CONSTRAINT user_follows_following_id_fkey FOREIGN KEY (following_id) REFERENCES public.client(id)
+);
+
+
+
+
+
+
+
+
+
+والداتا بيس بتاعت المقالات في مشاريع العملاء ( اللي هتبعت المقالات عليها ) بكون كدا
+tabel name : articles
+
+والهيكلة نفسها عامله كدا
+create table public.articles (
+  id uuid not null default gen_random_uuid (),
+  title_en text not null,
+  title_ar text not null,
+  content_en text not null,
+  content_ar text not null,
+  image_url text null,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+  show_on_homepage boolean null default true,
+  constraint articles_pkey primary key (id)
+) TABLESPACE pg_default;
+
+create index IF not exists idx_articles_created_at on public.articles using btree (created_at desc) TABLESPACE pg_default;
+
+create trigger update_articles_updated_at BEFORE
+update on articles for EACH row
+execute FUNCTION update_updated_at_column ();

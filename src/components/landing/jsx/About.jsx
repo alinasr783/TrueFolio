@@ -7,29 +7,29 @@ export default function About() {
     { number: '150+', label: 'Projects Completed' },
     { number: '50+', label: 'Happy Clients' },
     { number: '5+', label: 'Years Experience' },
-    { number: '24/7', label: 'Support' }
+    { number: '24/7', label: 'Ongoing Support' }
   ];
 
   const values = [
     {
       icon: <FaRocket />,
       title: 'Innovation',
-      description: 'We constantly explore the latest technologies and innovative solutions to stay ahead in the digital landscape.'
+      description: 'We constantly explore the latest technologies and creative solutions to stay ahead.'
     },
     {
       icon: <FaGem />,
       title: 'Quality',
-      description: 'We commit to the highest quality standards in every project, ensuring excellence in delivery and performance.'
+      description: 'We commit to the highest quality standards in every project.'
     },
     {
       icon: <FaHandshake />,
       title: 'Transparency',
-      description: 'We maintain clear and honest relationships with our clients, keeping them informed at every stage.'
+      description: 'We work with clear, honest relationships and keep clients informed.'
     },
     {
       icon: <FaChartLine />,
       title: 'Growth',
-      description: 'We focus on helping our clients achieve sustainable growth and long-term success in their markets.'
+      description: 'We focus on enabling clients to achieve sustainable growth and long-term success.'
     }
   ];
 
@@ -37,17 +37,17 @@ export default function About() {
     {
       icon: <FaBullseye />,
       title: 'Our Mission',
-      description: 'To deliver innovative digital solutions that empower businesses to achieve their goals through cutting-edge technology and creative strategies.'
+      description: 'Deliver innovative digital solutions that empower companies to achieve their goals.'
     },
     {
       icon: <FaEye />,
       title: 'Our Vision',
-      description: 'To be the preferred digital partner for ambitious companies in the region, transforming ideas into tangible success through exceptional technological solutions.'
+      description: 'Be the preferred digital partner for ambitious companies by turning ideas into tangible success.'
     },
     {
       icon: <FaAward />,
       title: 'Our Goal',
-      description: 'To consistently exceed client expectations by delivering projects on time, within budget, and with unmatched quality and support.'
+      description: 'Consistently exceed client expectations with timely delivery, quality, and unmatched support.'
     }
   ];
 
@@ -58,8 +58,7 @@ export default function About() {
         <div className='about-hero-content'>
           <h1 className='about-title'>About Us</h1>
           <p className='about-subtitle'>
-            A leading digital solutions company providing comprehensive services that help our clients 
-            grow and excel in the digital world through innovation and expertise.
+            We are a leading digital solutions company helping clients grow and excel through innovation and expertise.
           </p>
           <div className='hero-stats'>
             {stats.map((stat, index) => (
@@ -77,7 +76,7 @@ export default function About() {
         <div className='container'>
           <div className='section-header'>
             <h2>Our Purpose</h2>
-            <p>What drives us forward and defines our path to success</p>
+            <p>What drives us forward and shapes our path to success</p>
           </div>
           <div className='goals-grid'>
             {goals.map((goal, index) => (
@@ -121,22 +120,22 @@ export default function About() {
             <div className='feature-item'>
               <div className='feature-number'>01</div>
               <h3>Expert Team</h3>
-              <p>Our team consists of experienced professionals who are passionate about technology and innovation.</p>
+              <p>Our team includes experienced professionals with a passion for technology and innovation.</p>
             </div>
             <div className='feature-item'>
               <div className='feature-number'>02</div>
               <h3>Custom Solutions</h3>
-              <p>We tailor our services to meet your specific business needs and objectives.</p>
+              <p>We tailor our services to precisely meet your business needs and goals.</p>
             </div>
             <div className='feature-item'>
               <div className='feature-number'>03</div>
               <h3>Proven Results</h3>
-              <p>We have a track record of delivering successful projects that drive real business value.</p>
+              <p>We have a strong track record of delivering projects that create real business value.</p>
             </div>
             <div className='feature-item'>
               <div className='feature-number'>04</div>
               <h3>Ongoing Support</h3>
-              <p>We provide continuous support and maintenance to ensure your long-term success.</p>
+              <p>We provide continuous support and maintenance to ensure long-term success.</p>
             </div>
           </div>
         </div>

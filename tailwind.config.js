@@ -3,7 +3,7 @@ export default {
     darkMode: ["class"],
     content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // هنا بيتأكد انه يقرأ كل ملفات React
+    "./src/**/*.{js,ts,jsx,tsx}", // Ensure Tailwind scans all React files
   ],
   theme: {
   	extend: {

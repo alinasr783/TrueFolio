@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Hyperspeed from '../../bits/jsx/Hyperspeed'
 import TextPressure from '../../bits/jsx/TextPressure';
 import '../css/Hero.css'
 
 export default function Hero(){
+  const [enableEffects, setEnableEffects] = useState(true);
+
+  useEffect(() => {
+    const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cores = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4;
+    const mem = typeof navigator !== 'undefined' && navigator.deviceMemory ? navigator.deviceMemory : 4;
+    if (prefersReduced || cores <= 2 || mem <= 2) {
+      setEnableEffects(false);
+    }
+  }, []);
+
   return(
     <div className='Hero'>
       <div className='Hero-content'>
         <div className='Hero-text'>
           <div className='Hero-title'>
+            <h1 style={{fontSize: '2rem', marginBottom: '1rem'}}>Create a professional website for your business</h1>
             <div style={{position: 'relative', height: '300px'}}>
               <TextPressure
                 text="TrueFolio"
@@ -25,6 +37,7 @@ export default function Hero(){
             </div>
           </div>
           <div className='Hero-subtitle'>
+            <p style={{color:'#b0b0b0', marginBottom:'1rem'}}>Create Your Professional Website with TrueFolio</p>
             <div style={{position: 'relative', height: '300px'}}>
               <TextPressure
                 text="Tailored - Websites, Timeless - Style"
@@ -46,6 +59,7 @@ export default function Hero(){
         </div>
       </div>
       <div className='Hero-background'>
+      {enableEffects ? (
       <Hyperspeed
         effectOptions={{
           onSpeedUp: () => { },
@@ -85,6 +99,9 @@ export default function Hero(){
           }
         }}
       />
+      ) : (
+        <div style={{position:'absolute', inset:0, background:'radial-gradient(1200px circle at 20% 10%, rgba(120,119,198,0.15), transparent), linear-gradient(135deg, #0b0b0b, #111)'}} />
+      )}
       </div>
     </div>
   )

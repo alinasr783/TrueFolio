@@ -1,0 +1,16 @@
+.dashboard{
+  position: absolute;
+  left: 3rem;
+  top: 0;
+  width: calc(100vw-10rem);
+  overflow-x: hidden;
+  height: 100%;
+  border : 1px solid red;
+  display: flex;
+  flex-direction: column;
+}
+.dash-content{
+  width:100%;
+  min-height: 100vw;
+  border : 1px solid blue;
+}

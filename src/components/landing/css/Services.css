@@ -54,17 +54,17 @@
 }
 @media (max-width: 768px) {
   .services-cards {
-    flex-direction: column;      /* خليها عمود بدل صف */
-    justify-content: center;     /* وسّطها عموديًا */
-    align-items: center;         /* وسّطها أفقيًا */
-    gap: 20px;                   /* مسافة بين الكروت */
-    min-height: 100vh;           /* خليها تاخد ارتفاع الشاشة بالكامل */      
+    flex-direction: column;      /* Switch to column for mobile */
+    justify-content: center;     /* Center vertically */
+    align-items: center;         /* Center horizontally */
+    gap: 20px;                   /* Space between cards */
+    min-height: 100vh;           /* Full viewport height */
   }
 
   .service-card {
-    width: 100%;                  /* عشان تكون مناسبة للموبايل */
-    max-width: 400px;            /* أقصى عرض */
-    height: auto;                /* خليه يتظبط تلقائي */
+    width: 100%;                  /* Fit mobile screens */
+    max-width: 400px;            /* Max width */
+    height: auto;                /* Auto sizing */
     margin: 0 auto;
     box-sizing: border-box;
     
