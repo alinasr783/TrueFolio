@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react'
 import Headerbit from '../../bits/jsx/CardNav'
-import logo from '../../../assets/logo.png'
 import '../css/Header.css'
 export default function Header(){
   
@@ -39,7 +38,7 @@ export default function Header(){
   return(
     <div className='Header'>
       <Headerbit
-        logo={logo}
+        logo={"https://i.ibb.co/cShDsKLz/upscaled-2k-image.png"}
         logoAlt="TrueFolio"
         items={items}
         baseColor="#000"
