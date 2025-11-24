@@ -314,22 +314,6 @@ export default function PlatformDetails() {
           </div>
         </div>
 
-        {/* Ownership Percentage */}
-        {item.ownership_pct !== undefined && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ownership Percentage</h2>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${item.ownership_pct}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="h-full bg-blue-600 rounded-full"
-              />
-            </div>
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{item.ownership_pct}%</p>
-          </div>
-        )}
-
         {/* Similar Projects */}
         {similar.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
@@ -365,12 +349,7 @@ export default function PlatformDetails() {
           </div>
         )}
 
-        {/* Updated Date */}
-        {item.updated_at && (
-          <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-            Updated: {new Date(item.updated_at).toLocaleDateString()}
-          </div>
-        )}
+        
       </div>
     </div>
   )
