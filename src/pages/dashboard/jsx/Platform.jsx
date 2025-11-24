@@ -127,6 +127,7 @@ export default function PlatformDetails() {
       </div>
     )
   }
+  
 
   const tags = Array.isArray(item.tags) ? item.tags : []
   const createdAt = item.created_at ? new Date(item.created_at).toLocaleDateString() : null
@@ -175,8 +176,8 @@ export default function PlatformDetails() {
 
           {/* Content */}
           <div className="p-6 pt-8">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex-1 min-w-0">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div className="flex-1 min-w-0 w-full">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   {item.title || item.name}
                 </h1>
@@ -186,7 +187,7 @@ export default function PlatformDetails() {
                   </p>
                 )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 md:self-start md:flex-shrink-0">
                 <StatusBadge status={item.status || 'active'} />
                 <TypeBadge type={item.type} />
               </div>

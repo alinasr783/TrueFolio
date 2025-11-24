@@ -9,7 +9,7 @@ const SITE_BUCKET = "tool-sites";
 
 // Gemini API
 const GEMINI_MODEL = "gemini-2.0-flash";
-const GEMINI_API_KEY = "AIzaSyBpknrp9hVYU6zgY86QIQedSl4NmjrPCj4";
+const GEMINI_API_KEY = import.meta.env?.VITE_GEMINI_API_KEY || "AIzaSyBpknrp9hVYU6zgY86QIQedSl4NmjrPCj4";
 
 const LOGO_URL = "https://i.ibb.co/cShDsKLz/upscaled-2k-image.png";
 
@@ -84,7 +84,7 @@ async function callGemini(prompt) {
   let lastErr = null;
   for (const model of models) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
       const body = {
         contents: [
           {
@@ -98,7 +98,16 @@ async function callGemini(prompt) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error(`Gemini error ${res.status}`);
+      if (!res.ok) {
+        let msg = `Gemini error ${res.status}`;
+        try {
+          const errText = await res.text();
+          const errObj = JSON.parse(errText);
+          const apiMsg = errObj?.error?.message || "";
+          if (apiMsg) msg = `${msg}: ${apiMsg}`;
+        } catch {}
+        throw new Error(msg);
+      }
       const data = await res.json();
       const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (text) return clean(text);

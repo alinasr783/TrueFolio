@@ -20,7 +20,13 @@ export function SignupPage() {
     agreeToTerms: false,
   });
 
-  // Check referral code in URL on page load
+  useEffect(() => {
+    const code = searchParams.get("ref");
+    if (code && code !== formData.referralCode) {
+      setFormData((prev) => ({ ...prev, referralCode: code }));
+      checkReferralCode(code);
+    }
+  }, [searchParams]);
   // Function to validate referral code
   // Validate when referral code changes
   // Create auth account
