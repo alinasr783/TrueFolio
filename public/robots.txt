@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /dashboard
 
-Sitemap: https://truefolio.vercel.app/sitemap.xml
+Sitemap: https://truefolio.tech/sitemap.xml
 
